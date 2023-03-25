@@ -3,6 +3,8 @@ A simple C++ Monte Carlo integration program designed to scale well on multi-thr
 
 This simple test can be used to indicate both processor speed and multi-thread scaling.
 
+Intended for compute performance comparisons and thread scaling comparisons for enterprise cloud performance evaluation
+
 The tester works by generating a set of random points in the interval (a,b) and testing their heights in the sin(x)/x function.
 Heights are added to a running sum, to approximate the area under the curve sin(x)/x. 
 The workload is split thread-wise. 
