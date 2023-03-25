@@ -8,15 +8,23 @@ Heights are added to a running sum, to approximate the area under the curve sin(
 The workload is split thread-wise. 
 A different set of random points is used for every run and every thread.
 
-# USAGE: ./integrate lower_bound upper_bound point_count thread_count
+# integrate.cpp
+
+## USAGE: ./integrate a b point_count thread_count
+
+Approximates the area under the curve sin(x)/x for the interval (a,b) using the specified number of points split evenly across the specified number of threads.
+
+# speedup.sh
 
 speedup.sh tests a fixed number of points with a variable number of threads.
 Thread count starts at 1 and increases linearly to the specified max thread count.
-# USAGE: ./speedup.sh max_thread_count point_count
+## USAGE: ./speedup.sh max_thread_count point_count
 
+# efficiency.sh
+ 
 efficiency.sh tests a variable number of points with a variable number of threads.
 Thread count starts at 1 and increases linearly to the specified max thread count.
 Point count starts at 100,000,000 and increases linearly by 100,000,000 per iteration.
-# USAGE: ./efficiency.sh max_thread_count
+## USAGE: ./efficiency.sh max_thread_count
 
 Find an explanation of Monte Carlo Integration here: https://en.wikipedia.org/wiki/Monte_Carlo_integration
