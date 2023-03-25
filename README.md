@@ -15,6 +15,7 @@ A different set of random points is used for every run and every thread.
 ## USAGE: ./integrate a b point_count thread_count
 
 Approximates the area under the curve sin(x)/x for the interval (a,b) using the specified number of points split evenly across the specified number of threads.
+Valid for thread counts between 1 and 32. Thread counts outside this range will default to 8.
 
 # speedup.sh
 
