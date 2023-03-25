@@ -37,14 +37,15 @@ int main(int argc, char* argv[]){
     long double b = std::stold(argv[2]);
     long n = std::stol(argv[3]);
     long n_threads = std::stol(argv[4]);
+    long max_threads = 32;
 
-    if(n_threads > 10 || n_threads < 1) n_threads = 8;   //default to 8 if invalid count
+    if(n_threads > max_threads || n_threads < 1) n_threads = 8;   //default to 8 if invalid count
     long n_per_thread = n/n_threads;
     long remainder = n%n_threads;
     //long double partition = (b-a)/n_threads;
 
-    struct integration_args iArgs[10];  //scales to a max of 10 threads
-    pthread_t tids[10];
+    struct integration_args iArgs[max_threads];  //scales to a max of max_threads threads
+    pthread_t tids[max_threads];
     pthread_attr_t attr;
     pthread_attr_init(&attr);
 
@@ -54,7 +55,7 @@ int main(int argc, char* argv[]){
     iArgs[0].rtnVal = 0;
     pthread_create(&tids[0], &attr, integrate_runner, &iArgs[0]);
 
-    for(long i = 1; i < 10 && i < n_threads; i++){
+    for(long i = 1; i < max_threads && i < n_threads; i++){
         iArgs[i].a = a;// + (partition * (long double)i);
         iArgs[i].b = b;// + (partition * (long double)(i+1));
         iArgs[i].n = n_per_thread; 
