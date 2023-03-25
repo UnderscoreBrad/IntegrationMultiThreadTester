@@ -15,16 +15,14 @@ struct integration_args {
 
 void *integrate_runner(void* arg){
     struct integration_args *struct_ptr = (struct integration_args*) arg;
-    std::uniform_real_distribution<double> unif(struct_ptr->a, struct_ptr->b);      //https://en.cppreference.com/w/cpp/numeric/random/uniform_real_distribution
-    std::default_random_engine random;                                              //random doubles are faster than long doubles w/o difference in accuracy
-    //random.seed(std::chrono::system_clock::now().time_since_epoch().count());       //faster than std::random_device
+    std::uniform_real_distribution<double> unif(struct_ptr->a, struct_ptr->b);      
+    std::default_random_engine random;
     random.seed(pthread_self());
     for(long i = 0; i < struct_ptr->n; i++){
         long double point = unif(random);                            //Generate new random point
         long double height = sin(point)/point;                       //Get height at random point
         struct_ptr->rtnVal += height;                           //Add height to running sum
     }                                                           //area = ([summation f(x)]/(num points))*(upper bound - lower bound)
-    //struct_ptr->rtnVal = (struct_ptr->rtnVal/struct_ptr->n) * (struct_ptr->b-struct_ptr->a);
     pthread_exit(EXIT_SUCCESS);
 }
 
@@ -42,7 +40,6 @@ int main(int argc, char* argv[]){
     if(n_threads > max_threads || n_threads < 1) n_threads = 8;   //default to 8 if invalid count
     long n_per_thread = n/n_threads;
     long remainder = n%n_threads;
-    //long double partition = (b-a)/n_threads;
 
     struct integration_args iArgs[max_threads];  //scales to a max of max_threads threads
     pthread_t tids[max_threads];
@@ -50,14 +47,14 @@ int main(int argc, char* argv[]){
     pthread_attr_init(&attr);
 
     iArgs[0].a = a;
-    iArgs[0].b = b;//a + partition;
-    iArgs[0].n = n_per_thread + remainder;  //deals with remainder while avoiding extra branch
+    iArgs[0].b = b;
+    iArgs[0].n = n_per_thread + remainder;
     iArgs[0].rtnVal = 0;
     pthread_create(&tids[0], &attr, integrate_runner, &iArgs[0]);
 
     for(long i = 1; i < max_threads && i < n_threads; i++){
-        iArgs[i].a = a;// + (partition * (long double)i);
-        iArgs[i].b = b;// + (partition * (long double)(i+1));
+        iArgs[i].a = a;
+        iArgs[i].b = b;
         iArgs[i].n = n_per_thread; 
         iArgs[i].rtnVal = 0;
         pthread_create(&tids[i], &attr, integrate_runner, &iArgs[i]);
