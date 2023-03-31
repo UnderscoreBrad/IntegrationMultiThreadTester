@@ -1,6 +1,6 @@
 .DEFAULT_GOAL := integrate
 CC = g++
-FLAGS = -Ofast -Wall -Wextra -pedantic
+FLAGS = -Ofast -Wall -Wextra
 OBJECTS = integrate.o
 EXECUTABLE = integrate
 NAME = bestus1
